@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 
 export default function Editor() {
   const [title, setTitle] = useState('Untitled');
@@ -23,8 +24,12 @@ export default function Editor() {
         contentEditable
         suppressContentEditableWarning
         ref={ref}
-        onInput={(e) => setContent((e.currentTarget as HTMLDivElement).innerHTML)}
-        dangerouslySetInnerHTML={{ __html: content || '<p>Start writing here...</p>' }}
+        onInput={(e) =>
+          setContent(DOMPurify.sanitize((e.currentTarget as HTMLDivElement).innerHTML))
+        }
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(content || '<p>Start writing here...</p>'),
+        }}
       />
       <div style={{ marginTop: 8 }}>
         <button onClick={() => alert(`Save not implemented yet — ${content.length} chars`)}>

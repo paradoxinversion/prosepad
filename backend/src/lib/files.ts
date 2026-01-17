@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 
+import { sanitizeHtml } from './sanitize';
 const DATA_ROOT = path.resolve(process.cwd(), 'data', 'docs');
 
 async function ensureDir(dir: string) {
@@ -20,8 +21,10 @@ export type Doc = {
 
 export async function saveDocument(id: string, doc: Doc) {
   await ensureDir(DATA_ROOT);
+  // sanitize content before saving
+  const safeDoc = { ...doc, content: sanitizeHtml(doc.content) } as Doc;
   const file = path.join(DATA_ROOT, `${id}.json`);
-  await fs.writeFile(file, JSON.stringify(doc, null, 2), 'utf8');
+  await fs.writeFile(file, JSON.stringify(safeDoc, null, 2), 'utf8');
   return file;
 }
 
