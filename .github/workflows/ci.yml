@@ -26,9 +26,9 @@ jobs:
         run: npm --prefix frontend run lint
       - name: Fail on `any` usage (quick scan)
         run: |
-          # Fail if TypeScript files use explicit `any` or `as any`
+          # Fail if TypeScript files use explicit `any` or `as any` (ignore node_modules)
           set -o pipefail
-          grep -nE "\b: ?any\b|as any\b" --include="*.ts" --include="*.tsx" -R frontend backend | tee any-usage.txt || true
+          grep -nRE --exclude-dir=node_modules "\b: ?any\b|as any\b" --include="*.ts" --include="*.tsx" frontend backend | tee any-usage.txt || true
           if [ -s any-usage.txt ]; then
             echo "Found explicit any usages:"; cat any-usage.txt; exit 1
           fi
