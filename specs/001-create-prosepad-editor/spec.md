@@ -68,7 +68,7 @@ Acceptance Scenarios:
 - **FR-001**: The system MUST allow creating a new document and saving it to disk under `./data/docs/` (or configured subdirectory) with a stable file name.
 - **FR-002**: The system MUST render and allow editing of basic rich-text features: bold, italic, underline, headings, ordered/unordered lists, blockquote, code span, and hyperlinks.
 - **FR-003**: The system MUST allow creating, renaming, and deleting folders under the chosen data directory; moving documents between folders MUST update the on-disk file location.
-- **FR-004**: The system MUST export documents to plain text (.txt) with reasonable formatting loss semantics and to at least one rich-text format (see [NEEDS CLARIFICATION: preferred rich export format — RTF, HTML, or DOCX?]).
+- **FR-004**: The system MUST export documents to plain text (.txt) with reasonable formatting loss semantics and to DOCX (.docx) as the canonical rich-text export format. The spec should document known fidelity limitations for DOCX export and include sample export tests.
 - **FR-005**: The UI MUST provide an Undo/Redo stack for text edits.
 - **FR-006**: The editor MUST auto-save drafts periodically and offer explicit Save; auto-save frequency is configurable.
 - **FR-007**: The application MUST run locally and be launchable from the terminal. Packaging/launch mode: local static server + browser (served via `npm` / a static server). No other packaging assumptions are required.
@@ -112,4 +112,4 @@ Acceptance Scenarios:
 
 ## Notes & Next Steps
 
-Decide the preferred rich export format (RTF/HTML/DOCX) — this choice affects tooling and the export test harness. Packaging is fixed to static server + browser and uses `npm` as the launcher.
+Preferred rich export format: DOCX — document DOCX export fidelity expectations and include sample export tests. Packaging is fixed to static server + browser and uses `npm` as the launcher.
