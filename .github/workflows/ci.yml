@@ -1,94 +1,143 @@
 name: CI
 
 on:
-    push:
-        branches: [main, "001-create-prosepad-editor"]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main, '001-create-prosepad-editor']
+  pull_request:
+    branches: [main]
 
 jobs:
-    lint-and-install:
-        name: Install & Lint (frontend + backend)
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "18"
-            - name: Install backend deps
-              run: npm --prefix backend ci
-            - name: Install frontend deps
-              run: npm --prefix frontend ci
-            - name: Lint backend
-              run: npm --prefix backend run lint
-            - name: Lint frontend
-              run: npm --prefix frontend run lint
+  lint-and-install:
+    name: Install & Lint (frontend + backend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install backend deps
+        run: npm --prefix backend ci
+      - name: Install frontend deps
+        run: npm --prefix frontend ci
+      - name: Lint backend
+        run: npm --prefix backend run lint
+      - name: Lint frontend
+        run: npm --prefix frontend run lint
 
-    test:
-        name: Unit & Integration Tests
-        runs-on: ubuntu-latest
-        needs: lint-and-install
-        steps:
-            - uses: actions/checkout@v4
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "18"
-            - name: Install dependencies
-              run: |
-                  npm --prefix backend ci
-                  npm --prefix frontend ci
-            - name: Run backend tests
-              run: npm --prefix backend test
-            - name: Run frontend tests
-              run: npm --prefix frontend test
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint-and-install
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: |
+          npm --prefix backend ci
+          npm --prefix frontend ci
+      - name: Run backend tests
+        run: npm --prefix backend test
+      - name: Run frontend tests
+        run: npm --prefix frontend test
 
-    build-frontend:
-        name: Build Frontend
-        runs-on: ubuntu-latest
-        needs: lint-and-install
-        steps:
-            - uses: actions/checkout@v4
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "18"
-            - name: Install frontend deps
-              run: npm --prefix frontend ci
-            - name: Build
-              run: npm --prefix frontend run build
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    needs: lint-and-install
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install frontend deps
+        run: npm --prefix frontend ci
+      - name: Build
+        run: npm --prefix frontend run build
 
-    security-scan:
-        name: Security Scan (npm audit)
-        runs-on: ubuntu-latest
-        needs: lint-and-install
-        steps:
-            - uses: actions/checkout@v4
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "18"
-            - name: Install deps
-              run: |
-                  npm --prefix backend ci
-                  npm --prefix frontend ci
-            - name: Audit backend
-              run: npm --prefix backend audit --audit-level=moderate || true
-            - name: Audit frontend
-              run: npm --prefix frontend audit --audit-level=moderate || true
+  security-scan:
+    name: Security Scan (npm audit)
+    runs-on: ubuntu-latest
+    needs: lint-and-install
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: |
+          npm --prefix backend ci
+          npm --prefix frontend ci
+      - name: Audit backend
+        run: npm --prefix backend audit --audit-level=moderate || true
+      - name: Audit frontend
+        run: npm --prefix frontend audit --audit-level=moderate || true
 
-    constitution-check:
-        name: Constitution Check
-        runs-on: ubuntu-latest
-        needs: lint-and-install
-        steps:
-            - uses: actions/checkout@v4
-            - name: Verify plan and constitution files exist
-              run: |
-                  test -f specs/001-create-prosepad-editor/plan.md || (echo "Missing plan.md" && exit 1)
-                  test -f specs/001-create-prosepad-editor/spec.md || (echo "Missing spec.md" && exit 1)
-                  test -f .specify/memory/constitution.md || (echo "Missing constitution.md" && exit 1)
-            - name: Basic plan validation
-              run: |
-                  grep -q "Backend" specs/001-create-prosepad-editor/plan.md || echo "Note: plan does not mention backend"
+  constitution-check:
+    name: Constitution Check
+    runs-on: ubuntu-latest
+    needs: lint-and-install
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify plan and constitution files exist
+        run: |
+          test -f specs/001-create-prosepad-editor/plan.md || (echo "Missing plan.md" && exit 1)
+          test -f specs/001-create-prosepad-editor/spec.md || (echo "Missing spec.md" && exit 1)
+          test -f .specify/memory/constitution.md || (echo "Missing constitution.md" && exit 1)
+      - name: Basic plan validation
+        run: |
+          grep -q "Backend" specs/001-create-prosepad-editor/plan.md || echo "Note: plan does not mention backend"
+
+  e2e:
+    name: E2E (Cypress headless)
+    runs-on: ubuntu-latest
+    needs: [build-frontend, test]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps (backend + frontend)
+        run: |
+          npm --prefix backend ci
+          npm --prefix frontend ci
+      - name: Build backend and frontend
+        run: |
+          npm --prefix backend run build
+          npm --prefix frontend run build
+      - name: Start backend
+        run: |
+          node backend/dist/index.js &
+          echo $! > /tmp/backend.pid
+      - name: Wait for backend
+        run: |
+          until curl -sS http://127.0.0.1:3000/health >/dev/null 2>&1; do sleep 0.5; done
+      - name: Start frontend preview
+        run: |
+          npm --prefix frontend run preview -- --port 5173 --host 127.0.0.1 &
+          echo $! > /tmp/frontend.pid
+      - name: Wait for frontend
+        run: |
+          until curl -sS http://127.0.0.1:5173/ >/dev/null 2>&1; do sleep 0.5; done
+      - name: Run Cypress headless
+        run: |
+          npm --prefix frontend run cy:run
+      - name: Upload Cypress artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts
+          path: |
+            frontend/cypress/videos
+            frontend/cypress/screenshots
+      - name: Stop servers
+        if: always()
+        run: |
+          if [ -f /tmp/frontend.pid ]; then kill "$(cat /tmp/frontend.pid)" || true; fi
+          if [ -f /tmp/backend.pid ]; then kill "$(cat /tmp/backend.pid)" || true; fi

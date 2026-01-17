@@ -1,6 +1,5 @@
 const BASE =
-  (import.meta && (import.meta as any).env && (import.meta as any).env.VITE_API_BASE) ||
-  'http://localhost:3000';
+  (typeof process !== 'undefined' && (process.env as any).VITE_API_BASE) || 'http://localhost:3000';
 
 export async function createDoc(payload: { title: string; content: string }) {
   const res = await fetch(`${BASE}/docs`, {
