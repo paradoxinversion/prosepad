@@ -8,6 +8,8 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=0",
     "test": "jest"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --headless",
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -25,6 +27,7 @@
     "ts-jest": "^29.0.0",
     "@testing-library/react": "^14.0.0",
     "jest-environment-jsdom": "^29.0.0",
-    "@types/jest": "^29.0.0"
+    "@types/jest": "^29.0.0",
+    "cypress": "^12.0.0"
   }
 }
