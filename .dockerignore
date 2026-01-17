@@ -1,0 +1,38 @@
+# Ignore node modules and build artifacts
+node_modules
+**/node_modules
+dist
+build
+frontend/dist
+backend/node_modules
+frontend/node_modules
+
+# Git and editor metadata
+.git
+.gitignore
+.DS_Store
+.vscode
+.idea
+
+# Environment files
+.env
+.env.*
+
+# Docker and compose
+Dockerfile*
+docker-compose*
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+coverage
+
+# Local data directories
+data/
+backend/data/
+
+# CI and specs
+.github/
+specs/
+tests/
