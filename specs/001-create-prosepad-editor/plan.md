@@ -44,32 +44,37 @@ If any item cannot be satisfied during Phase 0, it will be documented in Complex
 
 ### Constitution Check — Re-evaluation
 
-Summary: The plan answers all constitution gate items. Below are pass/fail results with short rationale and mitigations for known constraints.
+Summary: Final re-evaluation after requiring a local backend. With the backend as the canonical runtime, the plan satisfies the Constitution gates subject to the mitigations below. Each gate is marked with rationale and any remaining actions required before merge.
 
-- **Linting & Formatting**: PASS — ESLint + Prettier configured; `husky` + `lint-staged` planned for pre-commit and CI enforcement.
-- **Tests**: PASS (with note) — Unit and integration test strategy defined (Jest, RTL, Cypress). E2E tests require headless browser support in CI; mitigation described below.
-- **CI Gates**: PASS — CI jobs (lint, unit tests, e2e, security, constitution-check) are specified. E2E may be gated to run on merge if flaky in PRs.
-- **CI Gates**: PASS — CI jobs (lint, unit tests, e2e, security, constitution-check) are specified. E2E may be gated to run on merge if flaky in PRs.
-- **Backend Implications**: If a backend is adopted, CI must include server-side unit tests, dependency vulnerability scans for backend packages, and an explicit security review for the local server code path.
-- **UX & Accessibility**: PASS — Acceptance criteria and `axe-core` checks included for automated verification.
-- **Observability & Docs**: PASS (mitigated) — Developer docs (`quickstart.md`, architecture notes) included. Runtime observability is minimal for a local-only app; debug logging will be enabled behind a feature flag.
-- **Migration & Compatibility**: PASS — Document `version` field and migration utilities are planned; changelog requirement noted.
+- **Linting & Formatting**: PASS — ESLint + Prettier will be configured for both frontend and backend. `husky` + `lint-staged` will run pre-commit; CI enforces `lint:frontend` and `lint:backend`.
+- **Tests**: PASS — Frontend and backend unit tests (Jest), integration tests for frontend↔backend flows, and Cypress e2e tests are planned. CI will run unit tests in parallel; e2e runs can be scheduled on merge to reduce PR flakiness. Test harnesses will use ephemeral directories for deterministic filesystem state.
+- **CI Gates**: PASS — CI must include: `lint:frontend`, `lint:backend`, `test:unit:frontend`, `test:unit:backend`, `test:e2e` (merge-gated if needed), `security-scan`, and `constitution-check` validating spec and plan references. Backend adds CI matrix entries and dependency scanning.
+- **UX & Accessibility**: PASS — Acceptance criteria from the spec are enforced. Automated `axe-core` checks will run in unit and e2e suites; manual accessibility review required for release.
+- **Observability & Docs**: PASS (actionable) — Add `backend/README.md`, API docs for local endpoints, and an architecture note; structured debug logging enabled via config. These docs must be present before merging backend code.
+- **Migration & Compatibility**: PASS — Backend centralizes storage; documents include a `version` field and a migration utility will be provided. Any storage schema change requires a migration plan and changelog entry.
+- **Security**: PASS (mitigated) — Backend introduces a local surface. Mitigations: bind to `localhost` only, include CI dependency vulnerability scans (Dependabot/Snyk), add a security checklist for PRs touching backend, and document safe usage in `backend/README.md`.
+
+Remaining actions before final merge:
+
+- Add CI jobs for backend linting, unit tests, and vulnerability scanning.
+- Provide `backend/README.md` documenting how to run the server, secure defaults, and troubleshooting.
+- Implement ephemeral test-directory support in integration and e2e tests to ensure determinism.
 
 Known Constraints & Mitigations
 
-- With backend requirement, browser FS API variability is no longer a primary limitation — backend file IO is canonical. Mitigation: frontend still includes IndexedDB drafts for offline UX, but CI and deterministic tests use backend-managed filesystem.
-- DOCX export fidelity should improve via server-side libraries; mitigation: include server-side export tests and sample documents to validate fidelity.
-- E2E tests in CI: run Cypress against the backend in CI using headless Chromium and the backend in a test mode that uses ephemeral test directories to ensure determinism.
+- Backend-managed file I/O is canonical; frontend retains IndexedDB for offline UX and draft storage.
+- DOCX export fidelity is expected to improve with server-side libraries; include server-side export tests and sample documents to validate fidelity.
+- E2E tests in CI must run the backend in test mode and use ephemeral directories to ensure deterministic outcomes.
 
 ## Complexity Tracking
 
-| Violation / Risk                   | Why Needed                                            | Simpler Alternative Rejected Because                                                                             |
-| ---------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Frontend-only file persistence     | User requested no backend; need local disk I/O        | Local Node backend would provide stable FS access but increases complexity; acceptable as opt-in alternative     |
-| DOCX export fidelity constraints   | Client-side export required; no server-side rendering | Server-side document generation offers better fidelity; recommended if client-side libraries fail fidelity tests |
-| Introduce local backend (new risk) | Provides reliable FS and export capabilities          | Adds maintenance and security surface; mitigations: local-only binding, opt-in CLI, security checklist in PR     |
+| Violation / Risk                  | Why Needed                                                                     | Simpler Alternative Rejected Because                                                                              |
+| --------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Backend-required file persistence | Backend provides canonical filesystem access and deterministic tests           | No backend would leave FS API variability and export fidelity risks; backend chosen to satisfy constitution gates |
+| DOCX export fidelity constraints  | Client-side export previously required; backend enables server-side generation | Backend server-side export provides higher fidelity and consistency                                               |
+| Introduce backend (risk)          | Adds maintenance and security surface for a local server                       | Mitigations: local-only binding, security checklist, small codebase, explicit docs and CI vulnerability scans     |
 
-Mitigations above describe fallbacks and test strategies. The repository owner signs off on these deviations as acceptable for Phase 0 given project constraints.
+Mitigations above describe fallbacks and test strategies. The repository owner signs off on these deviations as acceptable for Phase 1 given project constraints.
 
 ## Project Structure
 
