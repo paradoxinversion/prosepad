@@ -29,7 +29,7 @@ export function sanitizeHtml(html: string): string {
     allowedSchemes: ['http', 'https', 'mailto', 'data'],
     allowProtocolRelative: false,
     transformTags: {
-      a: (tagName: any, attribs: any) => {
+      a: (tagName: string, attribs: Record<string, string>) => {
         // Remove dangerous hrefs
         const href = attribs.href || '';
         if (/^\s*javascript:/i.test(href)) {
