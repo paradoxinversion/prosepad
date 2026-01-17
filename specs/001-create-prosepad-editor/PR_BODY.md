@@ -35,70 +35,53 @@ What this PR contains
 Commits included (high-level)
 
 - Add ProsePad spec, plan, tasks, and checklists
-- Scaffold frontend and backend projects
-- Add editor component and API client
-- Implement backend file IO and export stubs
-- Add unit and e2e tests
-- Add sanitization (DOMPurify client, sanitize-html server) and tests
-- Harden CI: lint, tests, e2e, security scan, and constitution check
-- Fix TypeScript/ESLint integrations and remove explicit `any` usages
-- Add ignore files: `.prettierignore`, `.dockerignore`, `.npmignore`, `.eslintignore`
 
-How to run locally
+````markdown
+PR Summary
 
-1. Install dependencies:
+This PR contains the focused work for the `feat/prosepad-models` branch: adding `Document` model types and associated unit tests for both backend and frontend, plus small type-safety improvements to tests and file IO wiring to use the model.
+
+What this PR contains
+
+- Backend
+  - `backend/src/lib/models/document.ts`: `Document` model type with create/serialize/deserialize helpers.
+  - `backend/src/lib/files.ts` (typed): uses the `Document` model for read/write operations.
+  - `backend/tests/models.document.spec.ts`: unit tests for backend model helpers.
+
+- Frontend
+  - `frontend/src/models/document.ts`: `Document` TypeScript interfaces and serialization helpers mirroring backend shape.
+  - `frontend/src/models/document.test.ts`: unit tests validating frontend model helpers.
+
+- Tests & Type Hygiene
+  - Removed `as any` casts from model tests and tightened types where appropriate.
+  - Added ephemeral test utilities if required by model tests (no production behavior change).
+
+Commits included (high-level)
+
+- `feat(models): add Document models` — add backend and frontend `Document` types and helpers
+- `test(models): add unit tests` — model unit tests for backend and frontend
+- `chore(types): remove 'as any' casts in tests` — tighten tests to avoid explicit `any`
+- `chore(files): wire files.ts to use Document type` — small typing change to backend file IO
+
+How to run model tests locally
 
 ```bash
-npm install
-npm --prefix backend install
-npm --prefix frontend install
+npm --prefix backend test -- backend/tests/models.document.spec.ts
+npm --prefix frontend test -- frontend/src/models/document.test.ts
 ```
 
-2. Run backend and frontend in dev:
+Notes
 
-```bash
-npm run dev:backend
-npm run dev:frontend
-# open http://localhost:5173
-```
-
-3. Run tests:
-
-```bash
-npm --prefix backend test
-npm --prefix frontend test
-npm --prefix frontend run cy:run  # requires Cypress
-```
-
-Security notes
-
-- Backend binds to `127.0.0.1` only and is intended to run locally.
-- Server sanitizes HTML with `sanitize-html`. Client sanitizes with `dompurify` for defense-in-depth.
-- CI includes `npm audit` steps and a quick `any` usage scan.
-
-Completed checklist (selected)
-
-- Phase 1 setup: repository structure, scripts, linting, CI skeleton
-- Phase 2 foundational: backend server, file IO, export stub, API routes, tests, ephemeral test dir, data dir
-- Phase 3 (partial): API handlers, frontend API client, Editor component
-- CI finalized to run lint/test and e2e pipeline
-
-Remaining work (suggested follow-ups / separate PRs)
-
-- Implement document model types and frontend serialization (`backend/src/lib/models`, `frontend/src/models`)
-- Add autosave and more unit tests for editor behaviors
-- Implement folder endpoints/UI and comprehensive move contract tests
-- Implement a real DOCX generator in `backend/src/lib/export.ts` and export fidelity tests
-- Accessibility (axe-core) checks and manual review
-- Finalize documentation: `backend/README.md` expansion, `architecture.md`, security checklist
+- This PR is intentionally scoped to model types and tests only. It does not change editor UI, export logic, CI config, or other feature scaffolding introduced earlier.
 
 Suggested PR title
 
-Add ProsePad: frontend/backend scaffolds, editor, tests, CI, and sanitization (DOCX export stub)
+feat(models): add Document models and unit tests
 
 Suggested reviewers
 
-- Frontend: @frontend-owner
 - Backend: @backend-owner
-- Security/QA: @security-team
+- Frontend: @frontend-owner
+````
 
+Remaining work (suggested follow-ups / separate PRs)
