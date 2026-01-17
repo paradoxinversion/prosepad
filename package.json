@@ -1,28 +1,30 @@
 {
-    "name": "prosepad",
-    "private": true,
-    "version": "0.1.0",
-    "scripts": {
-        "dev:frontend": "npm --prefix frontend run dev",
-        "dev:backend": "npm --prefix backend run dev",
-        "build:frontend": "npm --prefix frontend run build",
-        "build:backend": "npm --prefix backend run build",
-        "lint:frontend": "npm --prefix frontend run lint",
-        "lint:backend": "npm --prefix backend run lint",
-        "test:frontend": "npm --prefix frontend test",
-        "test:backend": "npm --prefix backend test",
-        "serve-local": "npm --prefix frontend run preview",
-        "start-backend": "npm --prefix backend run serve"
-    },
-    "devDependencies": {
-        "lint-staged": "^13.0.0"
-    },
-    "lint-staged": {
-        "frontend/src/**/*.{ts,tsx,js,jsx}": [
-            "npm --prefix frontend run lint"
-        ],
-        "backend/src/**/*.{ts,js}": [
-            "npm --prefix backend run lint"
-        ]
-    }
+  "name": "prosepad",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint:backend": "npm --prefix backend run lint",
+    "test:frontend": "npm --prefix frontend test",
+    "test:backend": "npm --prefix backend test",
+    "serve-local": "npm --prefix frontend run preview",
+    "start-backend": "npm --prefix backend run serve"
+  },
+  "prepare": "husky install",
+  "devDependencies": {
+    "lint-staged": "^13.0.0",
+    "husky": "^8.0.0"
+  },
+  "lint-staged": {
+    "frontend/src/**/*.{ts,tsx,js,jsx}": [
+      "npm --prefix frontend run lint"
+    ],
+    "backend/src/**/*.{ts,js}": [
+      "npm --prefix backend run lint"
+    ]
+  }
 }
