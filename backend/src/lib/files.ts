@@ -7,7 +7,7 @@ const DATA_ROOT = path.resolve(process.cwd(), 'data', 'docs');
 async function ensureDir(dir: string) {
   try {
     await fs.mkdir(dir, { recursive: true });
-  } catch (e) {
+  } catch {
     // ignore
   }
 }
@@ -33,7 +33,7 @@ export async function readDocument(id: string) {
   try {
     const raw = await fs.readFile(file, 'utf8');
     return JSON.parse(raw) as Doc;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
