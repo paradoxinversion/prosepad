@@ -29,9 +29,18 @@
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-[Gates determined based on constitution file]
+The plan MUST include explicit answers for the following items; unresolved violations MUST be justified in the Complexity Tracking table.
+
+- Linting & Formatting: Which linters/formatters will be used and how they will run (pre-commit/CI).
+- Tests: Test strategy (unit, integration, e2e), minimum required test coverage for this feature, and where tests will live. For P1 stories tests SHOULD be written before implementation (TDD encouraged).
+- CI Gates: Which CI workflows must pass for this feature (lint, tests, security scans, integration checks) and any additional required checks.
+- UX & Accessibility: For user-facing changes include design references, acceptance criteria, and accessibility checks to be performed (contrast, keyboard navigation, screen-reader semantics).
+- Observability & Docs: Required logs/metrics, runtime checks, and developer docs (quickstart, run/debug notes) that will be added or updated.
+- Migration & Compatibility: For changes that alter public APIs or data formats include a migration plan, backward compatibility notes, and changelog entry.
+
+If any of the above items cannot be satisfied prior to Phase 0, document the reason and an explicit mitigation plan. The plan author (or repository owner for solo projects) signs off on any accepted deviations.
 
 ## Project Structure
 
@@ -48,6 +57,7 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
+
 <!--
   ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
   for this feature. Delete unused options and expand the chosen structure with
@@ -98,7 +108,7 @@ directories captured above]
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| Violation                  | Why Needed         | Simpler Alternative Rejected Because |
+| -------------------------- | ------------------ | ------------------------------------ |
+| [e.g., 4th project]        | [current need]     | [why 3 projects insufficient]        |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient]  |
