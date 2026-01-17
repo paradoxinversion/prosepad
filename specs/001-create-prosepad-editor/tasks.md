@@ -4,26 +4,26 @@
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-- [ ] T001 [P] Create repository structure: `backend/`, `frontend/`, `tests/`, `docs/`, `backend/src/`, `frontend/src/` (create directory placeholders)
-- [ ] T002 [P] Initialize frontend project (React + TypeScript + Vite): `frontend/package.json`, `frontend/vite.config.ts`, `frontend/tsconfig.json`
-- [ ] T003 [P] Initialize backend project (Node LTS + Express/Fastify + TypeScript): `backend/package.json`, `backend/tsconfig.json`
-- [ ] T004 [P] Add root development scripts and workspace commands: `package.json` (root) — scripts: `dev`, `build`, `serve-local`, `test`, `lint`
-- [ ] T005 [P] Configure linting/formatting and pre-commit hooks: add `.eslintrc`, `.prettierrc`, `husky/`, and `lint-staged` entries (root and `frontend`/`backend` as needed)
-- [ ] T006 [P] Add CI workflow skeleton (update `.github/workflows/ci.yml`) to include frontend/backend lint and test jobs (placeholders for full jobs)
+- [x] T001 [P] Create repository structure: `backend/`, `frontend/`, `tests/`, `docs/`, `backend/src/`, `frontend/src/` (create directory placeholders)
+- [x] T002 [P] Initialize frontend project (React + TypeScript + Vite): `frontend/package.json`, `frontend/vite.config.ts`, `frontend/tsconfig.json`
+- [x] T003 [P] Initialize backend project (Node LTS + Express/Fastify + TypeScript): `backend/package.json`, `backend/tsconfig.json`
+- [x] T004 [P] Add root development scripts and workspace commands: `package.json` (root) — scripts: `dev`, `build`, `serve-local`, `test`, `lint`
+- [x] T005 [P] Configure linting/formatting and pre-commit hooks: add `.eslintrc`, `.prettierrc`, `husky/`, and `lint-staged` entries (root and `frontend`/`backend` as needed)
+- [x] T006 [P] Add CI workflow skeleton (update `.github/workflows/ci.yml`) to include frontend/backend lint and test jobs (placeholders for full jobs)
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-- [ ] T007 Create backend server entry `backend/src/index.ts` with a minimal HTTP server binding to `localhost` and health endpoint
-- [ ] T008 Implement backend file IO module `backend/src/lib/files.ts` (read/write/move/list under `./data/docs/`)
-- [ ] T009 Implement backend export library stub `backend/src/lib/export.ts` (DOCX/plain export interface)
-- [ ] T010 Add backend API routing for docs `backend/src/api/docs.ts` (endpoints: `POST /docs`, `GET /docs/:id`, `PUT /docs/:id`, `POST /docs/:id/move`)
-- [ ] T011 Add backend tests scaffold `backend/tests/` and sample unit test `backend/tests/document.spec.ts`
-- [ ] T012 Add `backend/README.md` with start instructions, security notes (localhost binding), and troubleshooting
-- [ ] T013 Add ephemeral test-directory utility for tests `tests/utils/ephemeralDir.ts`
-- [ ] T014 Wire backend start script and sample data directory `./data/docs/.gitkeep`
-- [ ] T015 Update `.specify` or plan docs to reference backend as canonical runtime (`specs/001-create-prosepad-editor/plan.md`) — ensure links are present
+- [x] T007 Create backend server entry `backend/src/index.ts` with a minimal HTTP server binding to `localhost` and health endpoint
+- [x] T008 Implement backend file IO module `backend/src/lib/files.ts` (read/write/move/list under `./data/docs/`)
+- [x] T009 Implement backend export library stub `backend/src/lib/export.ts` (DOCX/plain export interface)
+- [x] T010 Add backend API routing for docs `backend/src/api/docs.ts` (endpoints: `POST /docs`, `GET /docs/:id`, `PUT /docs/:id`, `POST /docs/:id/move`)
+- [x] T011 Add backend tests scaffold `backend/tests/` and sample unit test `backend/tests/document.spec.ts`
+- [x] T012 Add `backend/README.md` with start instructions, security notes (localhost binding), and troubleshooting
+- [x] T013 Add ephemeral test-directory utility for tests `tests/utils/ephemeralDir.ts`
+- [x] T014 Wire backend start script and sample data directory `./data/docs/.gitkeep`
+- [x] T015 Update `.specify` or plan docs to reference backend as canonical runtime (`specs/001-create-prosepad-editor/plan.md`) — ensure links are present
 
 ---
 
@@ -42,14 +42,15 @@ Independent Test: Programmatic create → format → save → open round-trip pr
 
 - [ ] T018 [US1] Implement `backend/src/lib/models/document.ts` (Document model: id, title, path, content, version, timestamps)
 - [ ] T019 [US1] Implement `frontend/src/models/document.ts` (TypeScript model interfaces and serialization helpers)
-- [ ] T020 [US1] Implement backend handlers in `backend/src/api/docs.ts` (create, read, update) — depends on T008, T009
-- [ ] T021 [US1] Implement frontend API client `frontend/src/services/api.ts` with methods: `createDoc`, `openDoc`, `saveDoc`, `moveDoc`
-- [ ] T022 [US1] Implement core Editor component `frontend/src/components/Editor.tsx` (basic UI + format toolbar) and hook up to API client
+- [x] T020 [US1] Implement backend handlers in `backend/src/api/docs.ts` (create, read, update) — depends on T008, T009
+- [x] T021 [US1] Implement frontend API client `frontend/src/services/api.ts` with methods: `createDoc`, `openDoc`, `saveDoc`, `moveDoc`
+- [x] T022 [US1] Implement core Editor component `frontend/src/components/Editor.tsx` (basic UI + format toolbar) and hook up to API client
 - [ ] T023 [US1] Implement auto-save and explicit Save in `frontend/src/services/autoSave.ts` (configurable interval)
 - [ ] T024 [US1] Add unit tests for frontend document model and editor behaviors: `frontend/tests/unit/document.spec.ts`, `frontend/tests/unit/editor.spec.ts`
 - [ ] T025 [US1] Add logging and error handling for doc operations (`backend/src/lib/logging.ts` and usages)
-
-Checkpoint: US1 should be independently testable and pass core integration tests
+      [ ] T023 [US1] Implement auto-save and explicit Save in `frontend/src/services/autoSave.ts` (configurable interval)
+      [ ] T024 [US1] Add unit tests for frontend document model and editor behaviors: `frontend/tests/unit/document.spec.ts`, `frontend/tests/unit/editor.spec.ts`
+      [ ] T025 [US1] Add logging and error handling for doc operations (`backend/src/lib/logging.ts` and usages)
 
 ---
 
@@ -66,7 +67,7 @@ Goal: Create folders and move documents between folders; reflect on-disk changes
 
 - [ ] T028 [US2] Implement backend folder endpoints `backend/src/api/folders.ts` (create, rename, delete, list)
 - [ ] T029 [US2] Implement frontend folder UI `frontend/src/components/FolderList.tsx` and connect to API
-- [ ] T030 [US2] Implement backend atomic move operation in `backend/src/lib/files.ts` and unit tests
+- [x] T030 [US2] Implement backend atomic move operation in `backend/src/lib/files.ts` and unit tests
 - [ ] T031 [US2] Add accessibility keyboard nav tests for folder list `frontend/tests/integration/folder_keyboard.spec.ts`
 
 Checkpoint: US2 move operations should be fully testable and pass integration tests
@@ -84,8 +85,8 @@ Goal: Insert links, export to plain text and DOCX, verify fidelity.
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Implement backend export endpoint `backend/src/api/export.ts` (accept doc id + format)
-- [ ] T035 [US3] Implement server-side DOCX generator `backend/src/lib/export.ts` and sample fixtures `backend/tests/fixtures/sample_docs/`
+- [x] T034 [US3] Implement backend export endpoint `backend/src/api/export.ts` (accept doc id + format)
+- [x] T035 [US3] Implement server-side DOCX generator `backend/src/lib/export.ts` and sample fixtures `backend/tests/fixtures/sample_docs/`
 - [ ] T036 [US3] Implement frontend Export UI `frontend/src/components/ExportButton.tsx` and wiring to API
 - [ ] T037 [US3] Add round-trip fidelity tests asserting critical formatting preserved `backend/tests/integration/export_fidelity.spec.ts`
 
@@ -96,7 +97,7 @@ Checkpoint: US3 export flows testable and pass fidelity checks for common format
 ## Phase N: Polish & Cross-Cutting Concerns
 
 - [ ] T038 [P] Documentation: add `backend/README.md`, update `specs/001-create-prosepad-editor/quickstart.md`, add `specs/001-create-prosepad-editor/architecture.md`
-- [ ] T039 [P] CI: finalize `.github/workflows/ci.yml` to run lint/test for frontend/backend and run e2e in merge pipeline
+- [x] T039 [P] CI: finalize `.github/workflows/ci.yml` to run lint/test for frontend/backend and run e2e in merge pipeline
 - [ ] T040 [P] Add security checklist `docs/security.md` and enable dependency scanning (Dependabot/Snyk) configuration
 - [ ] T041 [P] Accessibility manual review and remediation tasks (`a11y-report/` artifacts)
 - [ ] T042 Code cleanup, formatting, and performance tuning (profile 1MB docs)
