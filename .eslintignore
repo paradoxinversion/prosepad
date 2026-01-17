@@ -1,0 +1,16 @@
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+dist/
+build/
+frontend/dist/
+coverage/
+.pnp.cjs
+.pnp.loader.mjs
+.env
+.env.*
+.DS_Store
+.vscode/
+.idea/
+data/
+backend/data/

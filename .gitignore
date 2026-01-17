@@ -1,0 +1,16 @@
+node_modules
+backend/data/
+dist/
+build/
+frontend/dist/
+frontend/node_modules/
+backend/node_modules/
+*.log
+.env
+.env.*
+.DS_Store
+.vscode/
+.idea/
+coverage/
+*.tmp
+*.swp

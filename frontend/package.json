@@ -1,0 +1,36 @@
+{
+  "name": "prosepad-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=0",
+    "test": "jest",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --headless"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "typescript": "^5.1.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "eslint-plugin-react": "^7.0.0",
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "@testing-library/react": "^14.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "cypress": "^12.0.0",
+    "dompurify": "^3.0.0"
+  }
+}
