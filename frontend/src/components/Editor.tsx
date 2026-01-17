@@ -21,11 +21,11 @@ export default function Editor() {
       <div
         style={{ border: '1px solid #ccc', minHeight: 240, padding: 8 }}
         contentEditable
+        suppressContentEditableWarning
         ref={ref}
-        onInput={(e) => setContent((e.target as HTMLDivElement).innerHTML)}
-      >
-        <p>Start writing here...</p>
-      </div>
+        onInput={(e) => setContent((e.currentTarget as HTMLDivElement).innerHTML)}
+        dangerouslySetInnerHTML={{ __html: content || '<p>Start writing here...</p>' }}
+      />
       <div style={{ marginTop: 8 }}>
         <button onClick={() => alert(`Save not implemented yet — ${content.length} chars`)}>
           Save
