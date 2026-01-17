@@ -71,7 +71,7 @@ Acceptance Scenarios:
 - **FR-004**: The system MUST export documents to plain text (.txt) with reasonable formatting loss semantics and to DOCX (.docx) as the canonical rich-text export format. The spec should document known fidelity limitations for DOCX export and include sample export tests.
 - **FR-005**: The UI MUST provide an Undo/Redo stack for text edits.
 - **FR-006**: The editor MUST auto-save drafts periodically and offer explicit Save; auto-save frequency is configurable.
-- **FR-007**: The application MUST run locally and be launchable from the terminal. Packaging/launch mode: local static server + browser (served via `npm` / a static server). No other packaging assumptions are required.
+- **FR-007**: The application MUST run locally and be launchable from the terminal. Packaging/launch mode: local static server + browser. No other packaging assumptions are required.
 - **FR-008**: The system MUST not require login — single-user local storage only.
 - **FR-009**: The system MUST include keyboard accessibility for core editing actions and support basic screen-reader semantics for document content and folder navigation.
 
@@ -83,7 +83,7 @@ Acceptance Scenarios:
 
 ## Key Entities
 
-- **Document**: id, title, path, content (rich-text model, e.g., HTML/Markdown+extensions or ProseMirror JSON), last_modified, size
+- **Document**: id, title, path, content (rich-text model, e.g., HTML/Markdown+extensions), last_modified, size
 - **Folder**: id, path, name, children
 - **ExportFormat**: name (plain, rtf, html, docx), capabilities (supports links, supports styles)
 
@@ -98,12 +98,11 @@ Acceptance Scenarios:
 
 - Single-user, local-only deployment — no authentication, no multi-user concerns.
 - Default storage directory: `./data/docs/` inside the repository; configurable via settings file.
-- Implementation will rely on a client-side rich-text engine (e.g., ProseMirror/TipTap/Slate) or a simple contenteditable model depending on packaging choice.
 
 ## Tests (brief)
 
 - Unit tests for document model (save/load, serialization round-trip).
-- Integration tests for UI flows (create, format, save, open, move, export) using a headless browser (static server + browser).
+- Integration tests for UI flows (create, format, save, open, move, export).
 - Accessibility checks for keyboard nav and basic ARIA roles.
 
 ## Migration & Compatibility
@@ -112,4 +111,4 @@ Acceptance Scenarios:
 
 ## Notes & Next Steps
 
-Preferred rich export format: DOCX — document DOCX export fidelity expectations and include sample export tests. Packaging is fixed to static server + browser and uses `npm` as the launcher.
+- Preferred rich export format: DOCX — document DOCX export fidelity expectations and include sample export tests.

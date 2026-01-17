@@ -1,13 +1,12 @@
-# Specification Quality Checklist: ProsePad — Local Rich Text Editor
+# Specification Quality Checklist: ProsePad — Create ProsePad Editor
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-01-16
-**Feature**: ../spec.md
+**Feature**: [spec.md](specs/001-create-prosepad-editor/spec.md)
 
 ## Content Quality
 
-- [ ] No implementation details (languages, frameworks, APIs)
-	- Status: FAIL — the spec mentions implementation-oriented items: "Implementation will rely on a client-side rich-text engine (e.g., ProseMirror/TipTap/Slate)" and references `npm` in packaging. Quote: "Implementation will rely on a client-side rich-text engine (e.g., ProseMirror/TipTap/Slate)" (Assumptions).
+- [x] No implementation details (languages, frameworks, APIs)
 - [x] Focused on user value and business needs
 - [x] Written for non-technical stakeholders
 - [x] All mandatory sections completed
@@ -16,7 +15,6 @@
 
 - [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
-	- Note: Most FRs have clear acceptance criteria; FR-004 recommends documenting DOCX fidelity which remains an implementation-testing task.
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
 - [x] All acceptance scenarios are defined
@@ -28,12 +26,12 @@
 
 - [x] All functional requirements have clear acceptance criteria
 - [x] User scenarios cover primary flows
-- [x] Feature meets measurable outcomes defined in Success Criteria (provisionally)
-- [ ] No implementation details leak into specification
-	- Status: FAIL — see Content Quality. The spec contains implementation hints (rich-text engines, `npm`). Consider moving those lines to an Implementation Notes appendix.
+- [x] Feature meets measurable outcomes defined in Success Criteria
+- [x] No implementation details leak into specification
 
 ## Notes
 
-- Items marked incomplete require spec updates before `/speckit.plan` or `/speckit.clarify`.
-- Suggested fixes:
-	- Remove or relocate explicit implementation tool mentions (ProseMirror/TipTap/Slate, `npm`) from the Assumptions to an "Implementation Notes" section so the spec remains focused on WHAT and WHY.
+- The spec intentionally states packaging/launch mode as "local static server + browser" for clarity; this is a deployment note and not a prescriptive implementation choice.
+- If you prefer a different default storage path, update the Assumptions section before planning.
+
+Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`
