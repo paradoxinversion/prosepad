@@ -1,5 +1,7 @@
 const BASE =
-  (typeof process !== 'undefined' && (process.env as any).VITE_API_BASE) || 'http://localhost:3000';
+  (typeof process !== 'undefined' &&
+    (process.env as unknown as Record<string, string | undefined>).VITE_API_BASE) ||
+  'http://localhost:3000';
 
 export async function createDoc(payload: { title: string; content: string }) {
   const res = await fetch(`${BASE}/docs`, {

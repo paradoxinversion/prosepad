@@ -10,7 +10,9 @@ describe('API client', () => {
 
   test('createDoc calls POST /docs and returns json', async () => {
     const mockJson = { id: '1', title: 'T', content: '' };
-    global.fetch = jest.fn().mockResolvedValue({ json: async () => mockJson } as any);
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => mockJson } as unknown as Response);
 
     const res = await createDoc({ title: 'T', content: '' });
     expect((global.fetch as jest.Mock).mock.calls[0][0]).toContain('/docs');
@@ -19,7 +21,9 @@ describe('API client', () => {
 
   test('openDoc calls GET /docs/:id and returns json', async () => {
     const mockJson = { id: '2', title: 'X' };
-    global.fetch = jest.fn().mockResolvedValue({ json: async () => mockJson } as any);
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => mockJson } as unknown as Response);
 
     const res = await openDoc('2');
     expect((global.fetch as jest.Mock).mock.calls[0][0]).toContain('/docs/2');
@@ -28,7 +32,9 @@ describe('API client', () => {
 
   test('saveDoc calls PUT /docs/:id and returns json', async () => {
     const mockJson = { id: '3', title: 'Saved' };
-    global.fetch = jest.fn().mockResolvedValue({ json: async () => mockJson } as any);
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => mockJson } as unknown as Response);
 
     const res = await saveDoc('3', { title: 'Saved', content: '<p>ok</p>' });
     const call = (global.fetch as jest.Mock).mock.calls[0];
@@ -39,7 +45,9 @@ describe('API client', () => {
 
   test('moveDoc posts destPath and returns json', async () => {
     const mockJson = { id: '4', newPath: 'moved' };
-    global.fetch = jest.fn().mockResolvedValue({ json: async () => mockJson } as any);
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ json: async () => mockJson } as unknown as Response);
 
     const res = await moveDoc('4', 'moved');
     const call = (global.fetch as jest.Mock).mock.calls[0];
@@ -54,8 +62,8 @@ describe('API client', () => {
     const mockRes = {
       ok: true,
       blob: async () => blob,
-      headers: { get: (k: string) => 'attachment; filename="doc.txt"' },
-    } as any;
+      headers: new Headers({ 'content-disposition': 'attachment; filename="doc.txt"' }),
+    } as unknown as Response;
     global.fetch = jest.fn().mockResolvedValue(mockRes);
 
     const res = await exportDoc('5', 'plain');

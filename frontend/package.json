@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=5",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=0",
     "test": "jest",
     "cy:open": "cypress open",
     "cy:run": "cypress run --headless"
