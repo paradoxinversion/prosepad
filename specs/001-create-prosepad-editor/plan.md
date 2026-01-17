@@ -9,6 +9,8 @@
 
 Build a local, frontend-only rich-text editor (ProsePad) using React and TypeScript. The app runs in the browser as a static site (dev tooling via Node) and persists documents to the user's filesystem using the File System Access API when available, with IndexedDB and manual import/export as fallbacks. DOCX is the canonical rich export; export is performed client-side.
 
+**Alternative (optional): Local backend** — If browser-only persistence or export fidelity proves insufficient, an optional local Node backend (launched locally by the user) may be introduced to provide reliable filesystem access and server-side DOCX generation. See "Backend Option (Alternative)" below for decision criteria.
+
 ## Technical Context
 
 <!--
@@ -49,6 +51,8 @@ Summary: The plan answers all constitution gate items. Below are pass/fail resul
 - **Linting & Formatting**: PASS — ESLint + Prettier configured; `husky` + `lint-staged` planned for pre-commit and CI enforcement.
 - **Tests**: PASS (with note) — Unit and integration test strategy defined (Jest, RTL, Cypress). E2E tests require headless browser support in CI; mitigation described below.
 - **CI Gates**: PASS — CI jobs (lint, unit tests, e2e, security, constitution-check) are specified. E2E may be gated to run on merge if flaky in PRs.
+- **CI Gates**: PASS — CI jobs (lint, unit tests, e2e, security, constitution-check) are specified. E2E may be gated to run on merge if flaky in PRs.
+- **Backend Implications**: If a backend is adopted, CI must include server-side unit tests, dependency vulnerability scans for backend packages, and an explicit security review for the local server code path.
 - **UX & Accessibility**: PASS — Acceptance criteria and `axe-core` checks included for automated verification.
 - **Observability & Docs**: PASS (mitigated) — Developer docs (`quickstart.md`, architecture notes) included. Runtime observability is minimal for a local-only app; debug logging will be enabled behind a feature flag.
 - **Migration & Compatibility**: PASS — Document `version` field and migration utilities are planned; changelog requirement noted.
@@ -61,10 +65,11 @@ Known Constraints & Mitigations
 
 ## Complexity Tracking
 
-| Violation / Risk                      | Why Needed                                   | Simpler Alternative Rejected Because                      |
-| ------------------------------------ | --------------------------------------------- | -------------------------------------------------------- |
-| Frontend-only file persistence       | User requested no backend; need local disk I/O | Local Node backend would provide stable FS access but violates "frontend-only" constraint and increases complexity |
-| DOCX export fidelity constraints     | Client-side export required; no server-side rendering | Server-side document generation offers better fidelity but requires backend
+| Violation / Risk                 | Why Needed                                            | Simpler Alternative Rejected Because                                                                               |
+| -------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Frontend-only file persistence   | User requested no backend; need local disk I/O        | Local Node backend would provide stable FS access but increases complexity; acceptable as opt-in alternative      |
+| DOCX export fidelity constraints | Client-side export required; no server-side rendering | Server-side document generation offers better fidelity; recommended if client-side libraries fail fidelity tests   |
+| Introduce local backend (new risk)| Provides reliable FS and export capabilities          | Adds maintenance and security surface; mitigations: local-only binding, opt-in CLI, security checklist in PR      |
 
 Mitigations above describe fallbacks and test strategies. The repository owner signs off on these deviations as acceptable for Phase 0 given project constraints.
 
@@ -145,6 +150,32 @@ frontend/
 ```
 
 Rationale: Keeps source focused and aligns with the user's requested stack (React + TypeScript) and frontend-only constraint.
+
+### Backend Option (Alternative)
+
+When to opt in:
+- If automated testing and CI require deterministic filesystem operations that cannot be reasonably exercised via the File System Access API and IndexedDB fallbacks.
+- If client-side DOCX generation cannot meet fidelity or performance targets after at least one iteration of client-side implementation and testing.
+
+Backend scope and responsibilities:
+- Serve as a local file manager for `./data/docs/` with a small REST API (or local IPC) to read/write/move files reliably during development and for users who choose to run the local server.
+- Perform server-side DOCX export for higher fidelity and offload heavy processing.
+
+Suggested backend tech (if chosen): Node.js (LTS) + Express (or Fastify) with a small CLI to start the server locally (e.g., `npm run serve-local`). Server runs only on the user's machine and is opt-in — default remains frontend-only.
+
+Security & governance notes:
+- Backend introduces a local network surface; the plan requires documenting how to run the server securely and ensuring local-only binding (localhost). CI security scans should also include any server-side dependencies.
+
+Impact on project structure if backend chosen:
+
+``text
+backend/
+├── package.json
+├── src/
+│   ├── index.ts        # Express/Fastify server
+  │   └── lib/            # file IO, docx generation
+frontend/               # unchanged
+```
 
 ## Complexity Tracking
 
